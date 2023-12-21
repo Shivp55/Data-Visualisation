@@ -1,0 +1,71 @@
+---
+title: "Data Visualisation"
+output: html_document
+date: "2023-04-14"
+---
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(ggcorrplot)
+library(corrplot)
+library(leaps)
+library(car)
+library(Metrics)
+library(reshape2)
+library(ggpubr)
+library(moments)
+```
+Loading of the Life Expectancy Data Which i downloaded from a Website
+
+```{r}
+data <- read.csv("./Life Expectancy Data.csv")
+head(data)
+sprintf("Dataset size: [%s]", toString(dim(data)))
+
+```
+
+```{r}
+summary(data)
+```
+
+Clean and filter data.
+Missing data:There are no missing values in the data that i have loaded.
+
+```{r}
+missing.rows = dim(data)[1] -  dim(na.omit(data))[1]
+sprintf("Dataset size: [%s]", toString(dim(data)))
+sprintf("Missing rows: %s (%s%%)", missing.rows, round((missing.rows*100)/dim(data)[1], 2))
+
+missings_df <- data.frame(type=c("missing", "non-missing") ,count = c(missing.rows,  dim(na.omit(data))[1]))
+missing_counts <- data.frame(feature = factor(names(data)),
+                    counts=sapply(data, function(x) sum(is.na(x))))
+
+```
+
+```{r}
+sum(is.na(data))
+```
+
+Duplicate Values:The are also no duplicate valurs present in the datatset
+```{r}
+sum(duplicated(data))
+```
+```{r}
+laptops<- unique(data) #removing duplicated rows
+sum(duplicated(data))
+```
+
+
+My final summary.
+```{r}
+summary(data)
+```
+
+
+
+
+Finally, I am writing my file as a csv, in order to be able to have it also as an excel file.
+```{r}
+write.csv(laptops, file = 'Life_Expectancy_Modified_Data.csv')
+```
+
